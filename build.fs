@@ -1,4 +1,4 @@
-: go
+: build
 	s" clear" system
 	s" cl65 ./*.c -t vic20 -o test.prg" system
 	$? 0 = if
@@ -11,6 +11,8 @@
 ;
 
 : run
-	s" xvic ./test.D64" system
+	s" xvic ./test.d64" system
 	s" clear" system
 ;
+
+: go s" micro test.c" system build ;

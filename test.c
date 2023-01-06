@@ -3,12 +3,12 @@
 #include "RetroDisk.h"
 
 int main() {
-	char test[90];
+	char test[160];
 	uint8_t result;
-	strcpy(test, "are you keeping up with the commodore?  cuz the commodore is keeping up with you!");
+	strcpy(test, "okay, it's really getting late here, and I really like that song, but it's time to make like a pc and crash. :d");
 
-	cputs("Testing SAVE...\r\n");
-	result = RD_Save(test, 90, "test.seq,w", 8);
+	cputs("Testing OVERWRITING...\r\n");
+	result = RD_Save(test, 160, "@0:data,seq,w", 8);
 	switch(result) {
 		case 0:
 			cputs("Bingo!");
