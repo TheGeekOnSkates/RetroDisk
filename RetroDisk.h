@@ -7,6 +7,31 @@
 #include <errno.h>
 #include <string.h>
 
+static uint8_t RD_Load(uint8_t *buffer, uint16_t bufferSize, char* fileName, uint8_t diskDriveNumber) {
+	// Declare variables
+	static int8_t result, length;
+	
+	// Open the file for reading
+	length = strlen(fileName);
+	fileName[1] = '0';
+	fileName[2] = ':';
+	fileName[length - 2] = ',';
+	fileName[length - 1] = 'r';
+	result = cbm_open(15, diskDriveNumber, 15, fileName + 1);
+	if (result != 0) return errno;
+
+	// Read the file
+	// Read the file - here's where it's snaffooing.
+	// How is this a "31;SYNTAX ERROR;00:00"?  What the puck does that mean?
+	// The code compiles and runs fine... what's syntactically wrong here?
+	// Those cc65 guys rock at building compilers/assemblers, but OMGosh
+	// do they ever suuuuuck puuuuucks at writing DOCS!!! :P
+	// Or could it be some kind of 1982 NULL pointer shenanigans going on under the hood? :P
+	result = cbm_read(15, buffer, bufferSize);
+	cbm_close(15);
+	return result == -1 ? errno : 0;
+}
+
 /**
  * Saves data to disk
  * @param[in] The data (can be a string or binary)
@@ -32,21 +57,30 @@
  * Can it still write to disk?  Another experiment worth doing
  */
 static uint8_t RD_Save(uint8_t *buffer, uint16_t bufferSize, char* fileName, uint8_t diskDriveNumber) {
+	// Declare variables
 	static int8_t result, length;
+
+	// Open the file for writing
 	length = strlen(fileName);
 	fileName[length - 2] = ',';
 	fileName[length - 1] = 'w';
-	result = cbm_open(15, diskDriveNumber, 15, fileName + 2);
+	result = cbm_open(15, diskDriveNumber, 15, fileName + 3);	// Was + 2, double check on that (cuz "@0:")
 	if (result != 0) return errno;
+
+	// Write the data
 	result = cbm_write(15, (char *)buffer, bufferSize);
 	if (result == -1) {
 		cbm_close(15);
 		return errno;
 	}
+
+	// Edit the string so the disk drive understands what we want
 	fileName[length - 2] = '\0';
 	fileName[0] = '@';
 	fileName[1] = '0';
 	fileName[2] = ':';
+
+	// Save, close and we're done
 	result = cbm_save(fileName, diskDriveNumber, (char*)buffer, bufferSize);
 	cbm_close(15);
 	return result == -1 ? errno : 0;
