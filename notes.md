@@ -2,9 +2,13 @@
 
 * Get reading working
 
-	Currently giving me "31:syntax error:00:00"
-
-
+	Currently giving me "31,syntax error,00,00"
+	WIth some "cave-man debugging" I found the line that's triggering it is:
+	cbm_read(15, buffer, buffersize);
+	Just to be "interesting" (in a bad way) cbm_read does NOT return -1.
+	while(true) hair--; // :D
+	Tinker-tinker-tinker, guess-guess-guess, DuckDuckGo...
+	Nite-nite :P
 
 * Once reading is done, crazy idea time: How about a word processor?!  Here's my idea for how that would work:
 	- Cursor around anywhere on the screen, type what you want.
