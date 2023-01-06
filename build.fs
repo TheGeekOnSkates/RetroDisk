@@ -1,3 +1,5 @@
+: notes s" micro notes.md" system ;
+
 : build
 	s" clear" system
 	s" cl65 ./*.c -t vic20 -o test.prg" system

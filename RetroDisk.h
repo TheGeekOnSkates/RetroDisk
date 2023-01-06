@@ -14,8 +14,7 @@
  * @param[in] Disk drive number (usually 8)
  * @returns Zero if it works, or a an error code (errno) if not
  * @remarks It works!  HOWEVER...
- *		- I haven't tested overwriting yet.
- *		- I haven't tested appending yet
+  *		- I haven't tested appending yet
  *		- There's also a slight problem with the file open/save parameters:
  *			If you'll notice lines 52-53: there is no ",w" at the end.  So
  *			I may have to either make that a 5th parameter (which would be
@@ -36,7 +35,7 @@ static uint8_t RD_Save(uint8_t *buffer, uint16_t bufferSize, const char* fileNam
 		return errno;
 	}
 	// No ",w" at the end of the file name
-	result = cbm_save("test,seq", diskDriveNumber, (char*)buffer, bufferSize);
+	result = cbm_save("@0:test,seq", diskDriveNumber, (char*)buffer, bufferSize);
 	cbm_close(15);
 	return result == -1 ? errno : 0;
 }

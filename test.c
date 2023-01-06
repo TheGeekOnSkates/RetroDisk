@@ -8,7 +8,7 @@ int main() {
 	strcpy(test, "okay, it's really getting late here, and I really like that song, but it's time to make like a pc and crash. :d");
 
 	cputs("Testing OVERWRITING...\r\n");
-	result = RD_Save(test, 160, "@0:data,seq,w", 8);
+	result = RD_Save(test, 160, "data,seq,w", 8);
 	switch(result) {
 		case 0:
 			cputs("Bingo!");
