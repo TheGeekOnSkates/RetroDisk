@@ -13,11 +13,9 @@ static uint8_t RD_Load(uint8_t *buffer, uint16_t bufferSize, char* fileName, uin
 	
 	// Open the file for reading
 	length = strlen(fileName);
-	fileName[1] = '0';
-	fileName[2] = ':';
 	fileName[length - 2] = ',';
 	fileName[length - 1] = 'r';
-	result = cbm_open(15, diskDriveNumber, 15, fileName + 1);
+	result = cbm_open(2, diskDriveNumber, 2, fileName);
 	if (result != 0) return errno;
 
 	// Read the file
@@ -27,8 +25,8 @@ static uint8_t RD_Load(uint8_t *buffer, uint16_t bufferSize, char* fileName, uin
 	// Those cc65 guys rock at building compilers/assemblers, but OMGosh
 	// do they ever suuuuuck puuuuucks at writing DOCS!!! :P
 	// Or could it be some kind of 1982 NULL pointer shenanigans going on under the hood? :P
-	result = cbm_read(15, buffer, bufferSize);
-	cbm_close(15);
+	result = cbm_read(2, buffer, bufferSize);
+	cbm_close(2);
 	return result == -1 ? errno : 0;
 }
 
