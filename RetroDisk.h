@@ -84,6 +84,22 @@ static uint8_t RD_Save(uint8_t *buffer, uint16_t bufferSize, char* fileName, uin
 	return result == -1 ? errno : 0;
 }
 
+static uint8_t RD_Rename(char* fileName, uint8_t diskDriveNumber) {
+	// Declare variables
+	static int8_t result;
+
+	// Replace the pad with "R0:" - keep in mind the character sets
+	fileName[0] = 'r';
+	fileName[1] = '0';
+	fileName[2] = ':';
+	
+	// Open the file for deleting
+	result = cbm_open(15, diskDriveNumber, 15, fileName);
+	if (result != 0) return errno;
+	cbm_close(15);
+	return 0;
+}
+
 static uint8_t RD_Delete(char* fileName, uint8_t diskDriveNumber) {
 	// Declare variables
 	static int8_t result;
