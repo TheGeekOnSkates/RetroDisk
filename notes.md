@@ -1,16 +1,20 @@
+# Resources
+
+I finally got some good sites where I can further research CBM DOS:
+
+1. https://www.wikiwand.com/en/Commodore_DOS
+2. https://petlibrary.tripod.com/errmsg.htm
+
+The first one is hands-down the most thorough, but the other one explains the funky error I was getting.
+
+
+
 # TO-DO's:
 
-* Get reading working
-
-	Currently giving me "31,syntax error,00,00"
-	WIth some "cave-man debugging" I found the line that's triggering it is:
-	cbm_read(15, buffer, buffersize);
-	Just to be "interesting" (in a bad way) cbm_read does NOT return -1.
-	while(true) hair--; // :D
-	Tinker-tinker-tinker, guess-guess-guess, DuckDuckGo...
-	Nite-nite :P
-
-* Once reading is done, crazy idea time: How about a word processor?!  Here's my idea for how that would work:
+* How about renaming?  Just discovered "r0"
+* What about getting errors?  Is errno really the way to go?  Research the cc65 docs
+* Write docs.  As far as I'm concerned, this initial build is done!
+* Crazy idea time: How about a word processor?!  Here's my idea for how that would work:
 	- Cursor around anywhere on the screen, type what you want.
 	- F7 opens a file
 	- F8 saves a file
