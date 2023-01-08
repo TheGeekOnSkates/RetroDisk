@@ -6,7 +6,7 @@
 
 : build
 	s" clear" system
-	s" cl65 ./*.c -t vic20 -o test.prg" system
+	s" cl65 ./*.c -t c64 -o test.prg" system
 	$? 0 = if
 		.\" \x1b[1;32mBuild worked.\x1b[0m" cr
 		." Once you have it on a D64 image, use the word RUN to test." cr
@@ -18,7 +18,7 @@
 ;
 
 : run
-	s" xvic ./test.d64" system
+	s" x64 ./test.d64" system
 	s" clear" system
 ;
 

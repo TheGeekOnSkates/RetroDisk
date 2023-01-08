@@ -1,3 +1,27 @@
+/**************************************************************************
+
+(C) 2023 The Geek on Skates
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from
+the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+claim that you wrote the original software. If you use this software in
+a product, an acknowledgment in the product documentation would be
+appreciated but is not required.
+
+2. Altered source versions must be plainly marked as such, and must not
+be misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any source distribution.
+
+**************************************************************************/
+
 #ifndef _RETRODISK_H
 #define _RETRODISK_H
 
@@ -7,6 +31,16 @@
 #include <errno.h>
 #include <string.h>
 
+extern unsigned char _oserror;
+
+/**
+ * Reads a file into memory
+ @ param[out] The data read will be stored here (can be text or binary)
+ * @param[in] The size of the buffer, in bytes
+ * @param[in] The name of the file to read, padded with two spaces to the right
+ * @param[in] The disk drive number (will usually be 8, but can be any number you would use in BASIC - how many disk drives did they support at once? :D )
+ * @returns Zero if it works, or an error code (using standard C "errno") if it doesn't
+ */
 static uint8_t RD_Load(uint8_t *buffer, uint16_t bufferSize, char* fileName, uint8_t diskDriveNumber) {
 	// Declare variables
 	static int8_t result, length;
@@ -16,18 +50,17 @@ static uint8_t RD_Load(uint8_t *buffer, uint16_t bufferSize, char* fileName, uin
 	fileName[length - 2] = ',';
 	fileName[length - 1] = 'r';
 	result = cbm_open(2, diskDriveNumber, 2, fileName);
-	if (result != 0) return errno;
+	if (result != 0) return _osmaperrno(_oserror);
+
+	// The first 2 bytes are something internal, probably
+	// a file delimiter or the size of the file or something.
+	// We'll just skip those.
+	result = cbm_read(2, buffer, 2);
 
 	// Read the file
-	// Read the file - here's where it's snaffooing.
-	// How is this a "31;SYNTAX ERROR;00:00"?  What the puck does that mean?
-	// The code compiles and runs fine... what's syntactically wrong here?
-	// Those cc65 guys rock at building compilers/assemblers, but OMGosh
-	// do they ever suuuuuck puuuuucks at writing DOCS!!! :P
-	// Or could it be some kind of 1982 NULL pointer shenanigans going on under the hood? :P
 	result = cbm_read(2, buffer, bufferSize);
 	cbm_close(2);
-	return result == -1 ? errno : 0;
+	return result == -1 ? _osmaperrno(_oserror) : 0;
 }
 
 /**
@@ -63,13 +96,13 @@ static uint8_t RD_Save(uint8_t *buffer, uint16_t bufferSize, char* fileName, uin
 	fileName[length - 2] = ',';
 	fileName[length - 1] = 'w';
 	result = cbm_open(15, diskDriveNumber, 15, fileName + 3);	// Was + 2, double check on that (cuz "@0:")
-	if (result != 0) return errno;
+	if (result != 0) return _osmaperrno(_oserror);
 
 	// Write the data
 	result = cbm_write(15, (char *)buffer, bufferSize);
 	if (result == -1) {
 		cbm_close(15);
-		return errno;
+		return _osmaperrno(_oserror);
 	}
 
 	// Edit the string so the disk drive understands what we want
@@ -81,7 +114,7 @@ static uint8_t RD_Save(uint8_t *buffer, uint16_t bufferSize, char* fileName, uin
 	// Save, close and we're done
 	result = cbm_save(fileName, diskDriveNumber, (char*)buffer, bufferSize);
 	cbm_close(15);
-	return result == -1 ? errno : 0;
+	return result == -1 ? _osmaperrno(_oserror) : 0;
 }
 
 static uint8_t RD_Rename(char* fileName, uint8_t diskDriveNumber) {
@@ -95,7 +128,7 @@ static uint8_t RD_Rename(char* fileName, uint8_t diskDriveNumber) {
 	
 	// Open the file for deleting
 	result = cbm_open(15, diskDriveNumber, 15, fileName);
-	if (result != 0) return errno;
+	if (result != 0) return _osmaperrno(_oserror);
 	cbm_close(15);
 	return 0;
 }
@@ -111,7 +144,7 @@ static uint8_t RD_Delete(char* fileName, uint8_t diskDriveNumber) {
 	
 	// Open the file for deleting
 	result = cbm_open(15, diskDriveNumber, 15, fileName);
-	if (result != 0) return errno;
+	if (result != 0) return _osmaperrno(_oserror);
 	cbm_close(15);
 	return 0;
 }
