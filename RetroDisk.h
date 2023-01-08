@@ -95,7 +95,7 @@ static uint8_t RD_Save(uint8_t *buffer, uint16_t bufferSize, char* fileName, uin
 	length = strlen(fileName);
 	fileName[length - 2] = ',';
 	fileName[length - 1] = 'w';
-	result = cbm_open(15, diskDriveNumber, 15, fileName + 3);	// Was + 2, double check on that (cuz "@0:")
+	result = cbm_open(15, diskDriveNumber, 15, fileName + 3);	// Was + 2, double check on that (because "@0:")
 	if (result != 0) return _osmaperrno(_oserror);
 
 	// Write the data
