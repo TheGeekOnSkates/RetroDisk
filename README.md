@@ -23,7 +23,7 @@ Below that, you have the functions listed in [their function reference](https://
 
 ## API reference
 
-The whole library is contained in RetroDisk.h.  The functions it exports are:
+The whole library is contained in RetroDisk.h.
 
 
 ### A word about "padding" mentioned in my docs
@@ -33,7 +33,7 @@ So, CBM DOS has certain expectations about how commands should be formatted.  If
 
 ### A word about file names
 
-They should all be made up of just letters (not sure if spaces are allowed), and then ahve a comma, and either "seq" or "prg".  Unless you're doing something really unusual, file names will almost always be things like "myfile,seq" (again, that's a comma, not a period).
+They should all be made up of just letters (not sure if spaces are allowed), and then have a comma, and either "seq" or "prg".  Unless you're doing something really unusual, file names will almost always be things like "myfile,seq" (again, that's a comma, not a period).
 
 
 ### RD_Load
@@ -52,9 +52,7 @@ Reads a file into memory
 Zero if it works, or an error code (using standard C "errno") if it doesn't
 
 
-## RD_Save
-
-### RD_Load
+### RD_Save
 
 Saves a block of memory to a file
 
